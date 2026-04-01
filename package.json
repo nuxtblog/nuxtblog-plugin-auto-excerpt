@@ -1,0 +1,53 @@
+{
+  "name": "nuxtblog-plugin-auto-excerpt",
+  "version": "0.1.0",
+  "description": "发布/修改文章时，自动从正文内容生成摘要（支持 Markdown / HTML 剥离）",
+  "author": "nuxtblog",
+  "license": "MIT",
+  "keywords": [
+    "excerpt",
+    "seo",
+    "nuxtblog-plugin"
+  ],
+  "private": true,
+  "plugin": {
+    "title": "自动摘要",
+    "icon": "i-tabler-text-caption",
+    "entry": "index.js",
+    "capabilities": {},
+    "settings": [
+      {
+        "key": "mode",
+        "label": "生成模式",
+        "type": "select",
+        "default": "auto",
+        "options": ["auto", "always"],
+        "description": "auto = 仅当摘要为空时生成；always = 每次都覆盖已有摘要"
+      },
+      {
+        "key": "max_length",
+        "label": "最大字符数",
+        "type": "number",
+        "default": 160,
+        "description": "摘要最大字符数，超出部分截断（建议 120–200）"
+      },
+      {
+        "key": "ellipsis",
+        "label": "省略符",
+        "type": "string",
+        "default": "…",
+        "description": "内容被截断时追加在末尾的字符"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=neutral --main-fields=browser,module,main --target=es2015 --outfile=index.js",
+    "build:watch": "esbuild src/index.ts --bundle --platform=neutral --main-fields=browser,module,main --target=es2015 --outfile=index.js --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@nuxtblog/plugin-sdk": "^0.0.4",
+    "esbuild": "^0.27.4",
+    "typescript": "^6.0.2"
+  }
+}
