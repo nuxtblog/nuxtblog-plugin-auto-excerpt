@@ -1,6 +1,6 @@
 {
   "name": "nuxtblog-plugin-auto-excerpt",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "发布/修改文章时，自动从正文内容生成摘要（支持 Markdown / HTML 剥离）",
   "author": "nuxtblog",
   "license": "MIT",
@@ -21,7 +21,10 @@
         "label": "生成模式",
         "type": "select",
         "default": "auto",
-        "options": ["auto", "always"],
+        "options": [
+          "auto",
+          "always"
+        ],
         "description": "auto = 仅当摘要为空时生成；always = 每次都覆盖已有摘要"
       },
       {
