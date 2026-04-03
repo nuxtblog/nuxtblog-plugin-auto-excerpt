@@ -1,9 +1,9 @@
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 // auto-excerpt
 //
 // filter:post.create / filter:post.update 拦截，自动从正文生成摘要。
 // 支持剥离 Markdown 语法和 HTML 标签。
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 
 // ── 读取设置 ──────────────────────────────────────────────────────────────
 
@@ -76,41 +76,41 @@ function buildExcerpt(content: string, maxLen: number, ellipsis: string): string
   return truncated.trim() + ellipsis;
 }
 
-// ── filter:post.create ────────────────────────────────────────────────────
+// ── Lifecycle ─────────────────────────────────────────────────────────────
 
-nuxtblog.filter("post.create", (ctx) => {
-  const mode = getMode();
-  const maxLen = getMaxLength();
-  const ellipsis = getEllipsis();
+export function activate(ctx: PluginContext): void {
+  ctx.subscriptions.push(
+    nuxtblog.filter("post.create", (fCtx) => {
+      const mode = getMode();
+      const maxLen = getMaxLength();
+      const ellipsis = getEllipsis();
 
-  // auto 模式：摘要已有内容则跳过
-  if (mode === "auto" && ctx.data.excerpt?.trim()) return;
+      if (mode === "auto" && fCtx.data.excerpt?.trim()) return;
+      if (!fCtx.data.content?.trim()) return;
 
-  if (!ctx.data.content?.trim()) return;
+      const excerpt = buildExcerpt(fCtx.data.content, maxLen, ellipsis);
+      if (!excerpt) return;
 
-  const excerpt = buildExcerpt(ctx.data.content, maxLen, ellipsis);
-  if (!excerpt) return;
+      nuxtblog.log.info(`[auto-excerpt] create: 生成摘要 ${excerpt.length} 字符`);
+      fCtx.data.excerpt = excerpt;
+    }),
 
-  nuxtblog.log.info(`[auto-excerpt] create: 生成摘要 ${excerpt.length} 字符`);
-  ctx.data.excerpt = excerpt;
-});
+    nuxtblog.filter("post.update", (fCtx) => {
+      if (!fCtx.data.content?.trim()) return;
 
-// ── filter:post.update ────────────────────────────────────────────────────
+      const mode = getMode();
+      const maxLen = getMaxLength();
+      const ellipsis = getEllipsis();
 
-nuxtblog.filter("post.update", (ctx) => {
-  // 本次更新未涉及正文则跳过
-  if (!ctx.data.content?.trim()) return;
+      if (mode === "auto" && fCtx.data.excerpt?.trim()) return;
 
-  const mode = getMode();
-  const maxLen = getMaxLength();
-  const ellipsis = getEllipsis();
+      const excerpt = buildExcerpt(fCtx.data.content, maxLen, ellipsis);
+      if (!excerpt) return;
 
-  // auto 模式：本次更新已提供摘要则跳过
-  if (mode === "auto" && ctx.data.excerpt?.trim()) return;
+      nuxtblog.log.info(`[auto-excerpt] update: 生成摘要 ${excerpt.length} 字符`);
+      fCtx.data.excerpt = excerpt;
+    }),
+  );
+}
 
-  const excerpt = buildExcerpt(ctx.data.content, maxLen, ellipsis);
-  if (!excerpt) return;
-
-  nuxtblog.log.info(`[auto-excerpt] update: 生成摘要 ${excerpt.length} 字符`);
-  ctx.data.excerpt = excerpt;
-});
+export function deactivate(): void {}
