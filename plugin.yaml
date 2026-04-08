@@ -1,0 +1,42 @@
+id: nuxtblog-plugin-auto-excerpt
+title: 自动摘要
+version: 2.0.0
+icon: i-tabler-text-caption
+author: nuxtblog
+description: 发布/修改文章时，自动从正文生成摘要（支持 Markdown / HTML 剥离）
+
+type: js
+runtime: interpreted
+trust_level: official
+license: MIT
+sdk_version: "1.0.0"
+priority: 10
+
+repo: https://github.com/nuxtblog/nuxtblog-plugin-auto-excerpt
+homepage: https://github.com/nuxtblog/nuxtblog-plugin-auto-excerpt
+tags: [excerpt, seo]
+
+js_entry: dist/plugin.js
+
+settings:
+  - key: mode
+    label: 生成模式
+    type: select
+    default: auto
+    options: [auto, always]
+    description: "auto = 仅当摘要为空时生成；always = 每次都覆盖已有摘要"
+    group: 基础配置
+
+  - key: max_length
+    label: 最大字符数
+    type: number
+    default: 160
+    description: 摘要最大字符数，超出部分截断（建议 120–200）
+    group: 基础配置
+
+  - key: ellipsis
+    label: 省略符
+    type: string
+    default: "…"
+    description: 内容被截断时追加在末尾的字符
+    group: 基础配置
