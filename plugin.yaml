@@ -1,6 +1,6 @@
 id: nuxtblog-plugin-auto-excerpt
 title: 自动摘要
-version: 2.0.0
+version: 2.0.1
 icon: i-tabler-text-caption
 author: nuxtblog
 description: 发布/修改文章时，自动从正文生成摘要（支持 Markdown / HTML 剥离）
